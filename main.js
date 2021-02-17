@@ -60,8 +60,6 @@ const callInputID = (id) => document.getElementById(id).innerHTML;
 
 const calculationInvestorInput = (inputValues) => {
     let sipReturn;
-    
-
     if (inputValues.risk === "Safe") {
         sipReturn = 8;
     }
@@ -79,7 +77,8 @@ const calculationInvestorInput = (inputValues) => {
     let npr = ageDifference1 * 12;
     let i = (1+fixedReturn/100)/(1+currentRateInflation/100);
 
-    let fv = (inputValues.monthlyExpense*12) * Math.pow((1 +currentRateInflation/100), ageDifference1);
+    let fv = (inputValues.monthlyExpense * 12) * Math.pow((1 + currentRateInflation / 100), ageDifference1);
+    
     let pmt = (fv * r) / (Math.pow((1 + r), npr) - 1);
     let pv = fv * (1-1/Math.pow((1+i),ageDifference2));
 
