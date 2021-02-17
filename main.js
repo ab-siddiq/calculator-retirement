@@ -34,22 +34,18 @@ const getSetRadioButtonValue = (inputID, outputID) => {
 const getInputValue = () => {
     let name = callInputID('name-display');
     let age = parseFloat(callInputID('age-display'));
-    let annualIncome = parseFloat(callInputID('annual-income-display'));
-    let childCurrentAge = parseFloat(callInputID('child-age-display'));
-    let childAtAge = parseFloat(callInputID('need-amount-at-child-age-display'));
-    let currentEducationCost = parseFloat(callInputID('education-cost-display'));
-    let possibleInvestment = parseFloat(callInputID('possible-investment-display'));
+    let retirementAge = parseFloat(callInputID('retirement-age-display'));
+    let needSupportAge = parseFloat(callInputID('need-support-age-display'));
+    let monthlyExpense = parseFloat(callInputID('monthly-expense-display'));
     let risk = callInputID('risk-display');
     console.log(risk);
 
     const inputValues = {
         name: name,
         age: age,
-        annualIncome: annualIncome,
-        childCurrentAge: childCurrentAge,
-        childAtAge: childAtAge,
-        currentEducationCost: currentEducationCost,
-        possibleInvestment: possibleInvestment,
+        retirementAge: retirementAge,
+        needSupportAge: needSupportAge,
+        monthlyExpense: monthlyExpense,
         risk: risk,
     }
     console.log(inputValues);
@@ -63,64 +59,59 @@ const setOutputValue = (inputValues) => {
 const callInputID = (id) => document.getElementById(id).innerHTML;
 
 const calculationInvestorInput = (inputValues) => {
-    // console.log(inputValues,'casd');
-    console.log(typeof (inputValues.age));
-    console.log(typeof (inputValues.annualIncome));
-    console.log(typeof (inputValues.childCurrentAge));
-    console.log(typeof (inputValues.childAtAge));
-    console.log(typeof (inputValues.currentEducationCost));
-    console.log(typeof (inputValues.possibleInvestment));
-    const inflationPercent = 5.5;
-    // const estimatedPercent = 11;
+    let sipReturn;
+    
+
     if (inputValues.risk === "Safe") {
-        estimatedPercent = 8;
+        sipReturn = 8;
     }
     else if (inputValues.risk === "Moderate") {
-        estimatedPercent = 11;
+        sipReturn = 11;
     }
     else if (inputValues.risk === "Aggressive") {
-        estimatedPercent = 15;
+        sipReturn = 15;
     }
-    let ageDifference = inputValues.childAtAge - inputValues.childCurrentAge;
-    let fv1 = inputValues.currentEducationCost * Math.pow((1 + inflationPercent / 100), ageDifference);
-    let fv2 = inputValues.possibleInvestment * Math.pow((1 + estimatedPercent / 100), ageDifference);
-    let r = (estimatedPercent / (100 * 12));
-    let npr = ageDifference * 12;
+    const currentRateInflation = 6;
+    const fixedReturn = 10;
+    let ageDifference1 = inputValues.retirementAge - inputValues.age;
+    let ageDifference2 = inputValues.needSupportAge - inputValues.retirementAge;
+    let r = (sipReturn / (100 * 12));
+    let npr = ageDifference1 * 12;
+    let i = (1+fixedReturn/100)/(1+currentRateInflation/100);
 
-    let pmt = ((fv1 - fv2) * r) / (Math.pow((1 + r), npr) - 1);
-    console.log('fv pmt', fv1, fv2, pmt);
+    let fv = (inputValues.monthlyExpense*12) * Math.pow((1 +currentRateInflation/100), ageDifference1);
+    let pmt = (fv * r) / (Math.pow((1 + r), npr) - 1);
+    let pv = fv * (1-1/Math.pow((1+i),ageDifference2));
+
+    console.log('fv pmt', fv,'<br>' ,pmt,'<br>',pv);
     const outputValues = {
         name: inputValues.name,
-        ageGoal: inputValues.childAtAge,
-        fv1: fv1.toFixed(2),
-        fv2: fv2.toFixed(2),
-        inflationPercent: inflationPercent,
-        estimatedPercent: estimatedPercent,
+        retirementAge: inputValues.retirementAge,
+        needSupportAge: inputValues.needSupportAge,
+        fv: fv.toFixed(2),
         pmt: pmt.toFixed(2),
+        pv: pv.toFixed(2),
         possibleInvest: inputValues.possibleInvestment,
     }
     showOutput(outputValues);
 }
 
 const showOutput = (outputValues) => {
-    console.log(outputValues);
+    // console.log(outputValues);
     document.querySelector('.output-top').innerHTML = `
         <p class="text-justify"> 
-        Dear Mr/ Mrs. <strong> ${outputValues.name} </strong>When your Child will be at the Age of <strong> ${outputValues.ageGoal}</strong> You are to have <strong>${outputValues.fv1} Taka </strong>For the Education Plan
-        The Inflation is considered at <strong>${outputValues.inflationPercent}%</strong> , And The return is Estimated to be <strong>${outputValues.estimatedPercent}%</strong>
+            Dear Mr/ Mrs. <strong> ${outputValues.name} </strong>From the Age of  <strong> ${outputValues.retirementAge+1}</strong> You Need <strong>${outputValues.fv} Taka </strong>per year to maintain your current life style.
         </p>
         `
     document.querySelector('.output-bottom-left').innerHTML = `
-        <p class = "text-justify">   
-        Your monthly SIP investment of <strong> ${outputValues.pmt} Taka </strong> 
+        <p class="text-justify">
+            Alternatively, you need total <strong>${outputValues.pv} Taka</strong> ,after retirement to maintain your current life style up to <strong>${outputValues.needSupportAge}</strong> th year of your life.
         </p>
         `
         document.querySelector('.output-bottom-right').innerHTML = `
-        with initial investment of  <strong>${outputValues.possibleInvest} Taka</strong> help you to achieve your children's education at the age of <strong>${outputValues.ageGoal}</strong> <br>
-        <strong>${outputValues.fv2}
+        <p class = "text-justify">   
+            Your monthly SIP investment is <strong> ${outputValues.pmt} Taka </strong> "will help you to acheive your retirement goal i.e." & J8 & " at the age of 66 years. "
         </p>
-    
-    
     `
 }
 

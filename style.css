@@ -104,11 +104,10 @@
 #wealth-question-seven,
 
 #age-field,
-#annual-income-field,
-#child-current-age-field,
-#need-amount-at-child-age-field,
-#current-education-cost-field,
-#possible-investment-field,
+#retirement-age-field,
+#need-support-age-field,
+#monthly-expense-field,
+
 #risk-appetite-field,
 #wealth-demographic-calculation,
 #wealth-demographic-risk-quotient, .question-weight,#calculator-output {
