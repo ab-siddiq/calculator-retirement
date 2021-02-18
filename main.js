@@ -193,22 +193,3 @@ function getQuestionWeight(id) {
 function setRisk(id) {
     document.getElementById(id).click();
 }
-// demographic score calculation
-const wealthDemographicsScoreBack = document.getElementById("wealth-demographic-score-back");
-const wealthDemographicScoreEvaluate = document.getElementById("wealth-demographic-score-evaluate");
-
-wealthDemographicsScoreBack.addEventListener("click", function () {
-    const wealthQuestionSix = document.getElementById("wealth-question-six");
-    const wealthRiskQuestionArea = document.getElementById("wealth-risk-question-area");
-    const wealthDemographicCalculation = document.getElementById("wealth-demographic-calculation");
-    wealthQuestionSix.style.display = "block";
-    wealthRiskQuestionArea.style.display = "block";
-})
-
-wealthDemographicScoreEvaluate.addEventListener("click", function () {
-    const wealthDemographicCalculation = document.getElementById("wealth-demographic-calculation");
-    const wealthDemographicRiskQuotient = document.getElementById("wealth-demographic-risk-quotient");
-    wealthDemographicRiskQuotient.style.display = "block";
-    wealthDemographicCalculation.style.display = "none";
-})
-
