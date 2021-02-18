@@ -32,22 +32,27 @@ const getSetRadioButtonValue = (inputID, outputID) => {
     }
 }
 const getInputValue = () => {
-    let name = callInputID('name-display');
-    let age = parseFloat(callInputID('age-display'));
-    let retirementAge = parseFloat(callInputID('retirement-age-display'));
-    let needSupportAge = parseFloat(callInputID('need-support-age-display'));
-    let monthlyExpense = parseFloat(callInputID('monthly-expense-display'));
-    let risk = callInputID('risk-display');
-    console.log(risk);
-
+    // let name = callInputID('name-display');
+    // let age = parseFloat(callInputID('age-display'));
+    // let retirementAge = parseFloat(callInputID('retirement-age-display'));
+    // let needSupportAge = parseFloat(callInputID('need-support-age-display'));
+    // let monthlyExpense = parseFloat(callInputID('monthly-expense-display'));
+    // let risk = callInputID('risk-display');
+    // console.log(risk);
+    const getInputValues = Array.from(document.getElementsByClassName('display-output'));
+    let storeInputValues = [];
+    getInputValues.forEach(getValue => storeInputValues.push(getValue.innerText));
+    [yourName, age,retirementAge, atAge, presentCost,risk] = storeInputValues;
+         
     const inputValues = {
-        name: name,
-        age: age,
-        retirementAge: retirementAge,
-        needSupportAge: needSupportAge,
-        monthlyExpense: monthlyExpense,
+        name: yourName,
+        age: parseFloat(age),
+        retirementAge: parseFloat(retirementAge),
+        ageGoal: parseFloat(atAge),
+        goalCost: parseFloat(presentCost),
         risk: risk,
     }
+  
     console.log(inputValues);
     calculationInvestorInput(inputValues);
 }
@@ -72,12 +77,12 @@ const calculationInvestorInput = (inputValues) => {
     const currentRateInflation = 6;
     const fixedReturn = 10;
     let ageDifference1 = inputValues.retirementAge - inputValues.age;
-    let ageDifference2 = inputValues.needSupportAge - inputValues.retirementAge;
+    let ageDifference2 = inputValues.ageGoal - inputValues.retirementAge;
     let r = (sipReturn / (100 * 12));
     let npr = ageDifference1 * 12;
     let i = (1+fixedReturn/100)/(1+currentRateInflation/100);
 
-    let fv = (inputValues.monthlyExpense * 12) * Math.pow((1 + currentRateInflation / 100), ageDifference1);
+    let fv = (inputValues.goalCost * 12) * Math.pow((1 + currentRateInflation / 100), ageDifference1);
     
     let pmt = (fv * r) / (Math.pow((1 + r), npr) - 1);
     let pv = fv * (1-1/Math.pow((1+i),ageDifference2));
@@ -86,7 +91,7 @@ const calculationInvestorInput = (inputValues) => {
     const outputValues = {
         name: inputValues.name,
         retirementAge: inputValues.retirementAge,
-        needSupportAge: inputValues.needSupportAge,
+        needSupportAge: inputValues.ageGoal,
         fv: fv.toFixed(2),
         pmt: pmt.toFixed(2),
         pv: pv.toFixed(2),
