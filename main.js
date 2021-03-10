@@ -104,7 +104,7 @@ const showOutput = (outputValues) => {
     // console.log(outputValues);
     document.querySelector('.output-top').innerHTML = `
         <p class="text-justify"> 
-            Dear Mr/ Mrs. <strong> ${outputValues.name} </strong>From the Age of  <strong> ${outputValues.retirementAge+1}</strong> You Need <strong>${outputValues.fv} Taka </strong>per year to maintain your current life style.
+            Dear Mr/ Mrs. <strong> ${outputValues.name} </strong>From the Age of  <strong> ${outputValues.retirementAge+1}</strong> You Need <strong>${outputValues.fv} Taka </strong>per year to maintain your current life style. <br>
         </p>
         `
     document.querySelector('.output-bottom-left').innerHTML = `
