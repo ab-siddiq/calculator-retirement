@@ -9,7 +9,9 @@
     padding: 0;
 }
 
-
+#calculator .left{
+    text-align: justify;
+}
 #calculator hr.line {
     width: 80px;
     height: 4px;
@@ -144,7 +146,7 @@
     margin: 10px 10px;
 }
 
-#calculator strong{font-size: 2rem; color: #EF4B27;}
+#calculator .output-style strong{font-size: 2rem; color: #EF4B27;}
 #calculator .back-button{
     background-color: #EF4B2E;
     color: #fff;
