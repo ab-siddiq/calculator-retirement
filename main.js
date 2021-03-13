@@ -1,4 +1,8 @@
-
+const user = (getID, setID) =>{
+    document.getElementById(setID).innerHTML = document.getElementById(getID).value;
+    document.getElementById(setID).style.color = '#EF4B27';
+    document.getElementById(setID).style.textTransform = 'uppercase';
+}
 
 const displayHide = (displayID = '', hideID = '', inputValueID = '', outputValueID = '') => {
 
@@ -82,19 +86,22 @@ const calculationInvestorInput = (inputValues) => {
     let npr = ageDifference1 * 12;
     let i = (1+fixedReturn/100)/(1+currentRateInflation/100);
 
-    let fv = (inputValues.goalCost * 12) * Math.pow((1 + currentRateInflation / 100), ageDifference1);
-    
-    let pmt = (fv * r) / (Math.pow((1 + r), npr) - 1);
-    let pv = fv * (1-1/Math.pow((1+i),ageDifference2));
+    let cfv = (inputValues.goalCost * 12) * Math.pow((1 + currentRateInflation / 100), ageDifference1);
+    let cpmt = (cfv * r) / (Math.pow((1 + r), npr) - 1);
+    let cpv = cfv * (1-1/Math.pow((1+i),ageDifference2));
+
+    fv = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(cfv);
+    pv = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(cpv);
+    pmt = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(cpmt);
 
     console.log('fv pmt', fv,'<br>' ,pmt,'<br>',pv);
     const outputValues = {
         name: inputValues.name,
         retirementAge: inputValues.retirementAge,
         needSupportAge: inputValues.ageGoal,
-        fv: fv.toFixed(2),
-        pmt: pmt.toFixed(2),
-        pv: pv.toFixed(2),
+        fv: fv,
+        pmt: pmt,
+        pv: pv,
         possibleInvest: inputValues.possibleInvestment,
     }
     showOutput(outputValues);
@@ -107,12 +114,12 @@ const showOutput = (outputValues) => {
             Dear Mr/ Mrs. <strong> ${outputValues.name} </strong>From the Age of  <strong> ${outputValues.retirementAge+1}</strong> You Need <strong>${outputValues.fv} Taka </strong>per year to maintain your current life style. <br>
         </p>
         `
-    document.querySelector('.output-bottom-left').innerHTML = `
+    document.querySelector('.output-middle').innerHTML = `
         <p class="text-justify">
             Alternatively, you need total <strong>${outputValues.pv} Taka</strong> ,after retirement to maintain your current life style up to <strong>${outputValues.needSupportAge}</strong> th year of your life.
         </p>
         `
-        document.querySelector('.output-bottom-right').innerHTML = `
+        document.querySelector('.output-bottom').innerHTML = `
         <p class = "text-justify">   
             Your monthly SIP investment is <strong> ${outputValues.pmt} Taka </strong> "will help you to acheive your retirement goal i.e." & J8 & " at the age of 66 years. "
         </p>
