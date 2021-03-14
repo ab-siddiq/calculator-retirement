@@ -70,29 +70,43 @@ const callInputID = (id) => document.getElementById(id).innerHTML;
 const calculationInvestorInput = (inputValues) => {
     let sipReturn;
     if (inputValues.risk === "Safe") {
-        sipReturn = 8;
+        sipReturn = 6;
     }
     else if (inputValues.risk === "Moderate") {
         sipReturn = 11;
     }
     else if (inputValues.risk === "Aggressive") {
-        sipReturn = 15;
+        sipReturn = 10;
     }
     const currentRateInflation = 6;
     const fixedReturn = 10;
     let ageDifference1 = inputValues.retirementAge - inputValues.age;
     let ageDifference2 = inputValues.ageGoal - inputValues.retirementAge;
     let r = (sipReturn / (100 * 12));
-    let npr = ageDifference1 * 12;
+    let npr = (ageDifference1 * 12)-1;
     let i = (1+fixedReturn/100)/(1+currentRateInflation/100);
 
-    let cfv = (inputValues.goalCost * 12) * Math.pow((1 + currentRateInflation / 100), ageDifference1);
-    let cpmt = (cfv * r) / (Math.pow((1 + r), npr) - 1);
-    let cpv = cfv * (1-1/Math.pow((1+i),ageDifference2));
+    let cfv = (inputValues.goalCost * 12) * Math.pow((1 + (currentRateInflation / 100)), ageDifference1);
+    let cpmt = (cfv * r) / (Math.pow((1 + r), npr));
+    let cpv = ((1-1/Math.pow((1+i),ageDifference2))/i)*cfv;
 
-    fv = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(cfv);
-    pv = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(cpv);
-    pmt = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(cpmt);
+    let fixedPMT = cpmt.toFixed(2);
+    let ceilPMT = Math.ceil(fixedPMT);
+
+    let fixedFV = cfv.toFixed(2);
+  
+    // let ceilFV = Math.ceil(fixedFV);
+    let fixedPV = cpv.toFixed(2);
+    
+    // let p3 = p2.toFixed(2)
+    
+    // console.log(pointing)
+
+
+    // console.log(1-1/Math.pow((1+i),ageDifference2),'pow')
+    fv = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 15 }).format(fixedFV);
+    pv = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 15 }).format(fixedPV);
+    pmt = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 15 }).format(ceilPMT);
 
     console.log('fv pmt', fv,'<br>' ,pmt,'<br>',pv);
     const outputValues = {
@@ -121,7 +135,7 @@ const showOutput = (outputValues) => {
         `
         document.querySelector('.output-bottom').innerHTML = `
         <p class = "text-justify">   
-            Your monthly SIP investment is <strong> ${outputValues.pmt} Taka </strong> "will help you to acheive your retirement goal i.e." & J8 & " at the age of 66 years. "
+            Your monthly SIP investment is <strong> ${outputValues.pmt} Taka </strong> "will help you to acheive your retirement goal i.e.<strong>${outputValues.pv} Taka</strong> at the age of 66 years. "
         </p>
     `
 }
