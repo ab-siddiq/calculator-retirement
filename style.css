@@ -140,6 +140,7 @@
 }
 
 #calculator .output-style{
+    width: 100%;
     background-color: #EFF7FE;
     padding: 20px 30px;
     border-radius: 10px;

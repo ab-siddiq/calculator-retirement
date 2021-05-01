@@ -82,40 +82,49 @@ const calculationInvestorInput = (inputValues) => {
     const fixedReturn = 10;
     let ageDifference1 = inputValues.retirementAge - inputValues.age;
     let ageDifference2 = inputValues.ageGoal - inputValues.retirementAge;
-    let r = (sipReturn / (100 * 12));
-    let npr = (ageDifference1 * 12)-1;
-    let i = (1+fixedReturn/100)/(1+currentRateInflation/100);
+    let r = (sipReturn / 100) / 12;
+    let npr = (ageDifference1 * 12);
+   
+    let i = (((1 + fixedReturn / 100) / (1 + currentRateInflation / 100)) - 1);
 
     let cfv = (inputValues.goalCost * 12) * Math.pow((1 + (currentRateInflation / 100)), ageDifference1);
-    let cpmt = (cfv * r) / (Math.pow((1 + r), npr));
-    let cpv = ((1-1/Math.pow((1+i),ageDifference2))/i)*cfv;
-
+   
+    // let cpmt = (cfv * r) / (Math.pow((1 + r), npr));
+    // let cpv = ((1-1/Math.pow((1+i),ageDifference2))/i)*cfv;
+    
+    let cpv = (cfv / i) * (1 - ((Math.pow(1/(1 + i), ageDifference2))));
+    let cpmt = (cpv* r) / (Math.pow((1+r), npr)-1);
+   
     let fixedPMT = cpmt.toFixed(2);
-    let ceilPMT = Math.ceil(fixedPMT);
-
-    let fixedFV = cfv.toFixed(2);
+    let ceilPMT = Math.floor(fixedPMT);
+   
+    // let fixedFV = cfv.toFixed(2);
+    let fixedFV = Math.floor(cfv);
   
     // let ceilFV = Math.ceil(fixedFV);
-    let fixedPV = cpv.toFixed(2);
+    // let fixedPV = cpv.toFixed(2);
+    let fixedPV = Math.floor(cpv);
     
     // let p3 = p2.toFixed(2)
     
-    // console.log(pointing)
+    
 
 
     // console.log(1-1/Math.pow((1+i),ageDifference2),'pow')
     fv = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 15 }).format(fixedFV);
-    pv = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 15 }).format(fixedPV);
+    pv1 = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 15 }).format(fixedPV);
+    pv2 = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 15 }).format(cpv);
     pmt = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 15 }).format(ceilPMT);
 
-    console.log('fv pmt', fv,'<br>' ,pmt,'<br>',pv);
+    
     const outputValues = {
         name: inputValues.name,
         retirementAge: inputValues.retirementAge,
         needSupportAge: inputValues.ageGoal,
         fv: fv,
         pmt: pmt,
-        pv: pv,
+        pv1: pv1,
+        pv2: pv2,
         possibleInvest: inputValues.possibleInvestment,
     }
     showOutput(outputValues);
@@ -125,17 +134,17 @@ const showOutput = (outputValues) => {
     // console.log(outputValues);
     document.querySelector('.output-top').innerHTML = `
         <p class="text-justify"> 
-            Dear Mr/ Mrs. <strong> ${outputValues.name} </strong>From the Age of  <strong> ${outputValues.retirementAge+1}</strong> You Need <strong>${outputValues.fv} Taka </strong>per year to maintain your current life style. <br>
+            Dear Mr/ Mrs. <strong> ${outputValues.name} </strong>From the Age of  <strong> ${outputValues.retirementAge+1}</strong> You Need <strong>${outputValues.fv} Taka </strong>per year to maintain your current life style.
         </p>
         `
     document.querySelector('.output-middle').innerHTML = `
         <p class="text-justify">
-            Alternatively, you need total <strong>${outputValues.pv} Taka</strong> ,after retirement to maintain your current life style up to <strong>${outputValues.needSupportAge}</strong> th year of your life.
+            Alternatively, you need total <strong>${outputValues.pv1} Taka</strong> ,after retirement to maintain your current life style up to <strong>${outputValues.needSupportAge}</strong> th year of your life.
         </p>
         `
         document.querySelector('.output-bottom').innerHTML = `
         <p class = "text-justify">   
-            Your monthly SIP investment is <strong> ${outputValues.pmt} Taka </strong> "will help you to acheive your retirement goal i.e.<strong>${outputValues.pv} Taka</strong> at the age of 66 years. "
+            Your monthly SIP investment is <strong> ${outputValues.pmt} Taka </strong> "will help you to acheive your retirement goal i.e.<strong>${outputValues.pv2} Taka</strong> at the age of 66 years. "
         </p>
     `
 }
