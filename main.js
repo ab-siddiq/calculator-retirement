@@ -99,11 +99,11 @@ const calculationInvestorInput = (inputValues) => {
     let ceilPMT = Math.floor(fixedPMT);
    
     // let fixedFV = cfv.toFixed(2);
-    let fixedFV = Math.floor(cfv);
+    let fixedFV = Math.round(cfv);
   
     // let ceilFV = Math.ceil(fixedFV);
     // let fixedPV = cpv.toFixed(2);
-    let fixedPV = Math.floor(cpv);
+    let fixedPV = Math.round(cpv);
     
     // let p3 = p2.toFixed(2)
     
